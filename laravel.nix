@@ -29,8 +29,13 @@
 
         shellHook = ''
           echo -e "\033[0;36mSetting up Laravel environment...\033[0m"
-          composer global require laravel/installer --quiet
           export PATH="$PATH:$HOME/.config/composer/vendor/bin"
+          if command -v laravel &> /dev/null; then
+              echo -e "\033[0;32mFound the Laravel Binary!\033[0m"
+          else
+              echo -e "\033[0;33mCannot Find the Composer Binary! Installing...\033[0m"
+              composer global require laravel/installer --quiet
+          fi
           echo -e "\033[0;32mDone!\033[0m"
         '';
       };
