@@ -1,0 +1,24 @@
+{
+  description = "Flake Template for Development Environments";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+  };
+
+  outputs = { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages."${system}";
+    in
+    {
+      devShells.${system}.default = pkgs.mkShell {
+        name = "";
+
+        packages = [ ];
+
+        env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ ];
+
+        shellHook = '' '';
+      };
+    };
+}

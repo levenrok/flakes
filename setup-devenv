@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+CYAN='\033[0;36m'
+
+BOLD_RED='\033[1;31m'
+BOLD_GREEN='\033[1;32m'
+BOLD_CYAN='\033[1;36m'
+
+NC='\033[0m'
+
+FLAKE_PATH=~/.dotfiles/flakes
+WORK_PATH=.
+
+declare -A flakes
+
+scan_flakes() {
+    if [[ ! -d "$FLAKE_PATH" ]]; then
+        echo -e "${RED}ERROR: No Flake directory found! ${BOLD_RED}($FLAKE_PATH)${NC}" >&2
+        exit 1
+    fi
+
+    echo -e "${CYAN}--- Scanning for Flakes in ${BOLD_CYAN}$FLAKE_PATH${NC}${CYAN} ---${NC}"
+
+    for flake in "$FLAKE_PATH"/*.nix; do
+        basename=$(basename "$flake")
+
+        file="${basename%.nix}"
+        path="$flake"
+
+        flakes["$file"]="$path"
+    done
+
+    printf 'Available Flakes:\n'
+    for flake in "${!flakes[@]}"; do
+        if [[ "$flake" == "template" ]]; then
+            echo -e "${BOLD_GREEN}• $flake${NC}"
+        else
+            echo "• $flake"
+        fi
+    done
+}
+
+setup_flake() {
+    local requested_flake="$1"
+
+    if [[ -v "flakes[$requested_flake]" ]]; then
+        echo -e "${CYAN}--- Setting up Flake for ${BOLD_CYAN}$requested_flake${NC}${CYAN} ---${NC}"
+        cp "${flakes[$requested_flake]}" "$WORK_PATH/flake.nix"
+    else
+        echo -e "${RED}ERROR: No Flake found for ${BOLD_RED}$requested_flake${NC}${RED}!${NC}" >&2
+        printf 'Available Flakes are: [ '
+        printf '%s,' "${!flakes[@]}" | sed 's/,$//'
+        printf ' ]\n'
+        exit 1
+    fi
+}
+
+setup_environment() {
+    local environment_file="$FLAKE_PATH/.envrc"
+
+    if [[ -e $environment_file ]]; then
+        echo -e "${CYAN}--- Setting up the Environment ---${NC}"
+        cp "$environment_file" "$WORK_PATH"
+    else
+        echo -e "${RED}ERROR: No Environment file found! ${BOLD_RED}($(basename $environment_file))${NC}" >&2
+        exit 1
+    fi
+}
+
+enable_environment() {
+    read -r -p "Do you want to allow auto enabling the environment (Y/n)? " choice
+
+    case $choice in
+    "y" | "yes" | "")
+        echo -e "${CYAN}--- Enabling the Environment ---${NC}"
+        direnv allow $WORK_PATH
+        ;;
+    "n" | "no")
+        echo -e "${YELLOW}Okay! You can enable this later by running ${NC}direnv allow .${YELLOW} in this directory.${NC}"
+        ;;
+    *)
+        exit 1
+        ;;
+    esac
+}
+
+scan_flakes
+
+read -r -p "Flake: " flake
+setup_flake "$flake"
+setup_environment
+enable_environment
+echo -e "\n${GREEN}=== Setup Complete! ===${NC}"
