@@ -10,7 +10,8 @@
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages."${system}";
 
-      pyenv = ".venv/bin/activate";
+      pyenv = ".venv";
+      pyenv_bin = "${pyenv}/bin/activate";
     in
     {
       devShells.${system}.default = pkgs.mkShell {
@@ -18,7 +19,7 @@
 
         packages = [
           (pkgs.python3.withPackages (pypkgs: with pypkgs; [
-            python-lsp-server
+            jedi-language-server
             pip
           ]))
         ];
@@ -29,11 +30,11 @@
         ];
 
         shellHook = ''
-            if [[ ! -d .venv ]]; then
-                python3 -m venv .venv
-            fi
+          if [[ ! -d ${pyenv} ]]; then
+              python3 -m venv ${pyenv}
+          fi
 
-            source ${pyenv}
+          source ${pyenv_bin}
         '';
       };
     };
