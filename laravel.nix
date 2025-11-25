@@ -9,22 +9,27 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+
+      phpEnv = pkgs.php.buildEnv {
+        extensions = { enabled, all }: enabled ++ (with all; [
+          opcache
+          xdebug
+          pdo_sqlite
+        ]);
+        extraConfig = ''
+          xdebug.mode=debug
+        '';
+      };
     in
     {
       devShells.${system}.default = pkgs.mkShell {
         name = "laravel";
 
-        packages = with pkgs; [
-          nodejs_24
-          (php84.withExtensions
-            (
-              { enabled, all }: enabled ++ (with all; [
-                opcache
-                xdebug
-                pdo_sqlite
-              ])
-            ))
-          php84Packages.composer
+        buildInputs = [
+          pkgs.nodejs_24
+
+          phpEnv
+          phpEnv.packages.composer
         ];
 
         shellHook = ''

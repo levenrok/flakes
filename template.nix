@@ -14,7 +14,9 @@
       devShells.${system}.default = pkgs.mkShell {
         name = "";
 
-        packages = [ ];
+        nativeBuildInputs = [ ];
+
+        buildInputs = [ ];
 
         env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ ];
 

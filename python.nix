@@ -17,16 +17,20 @@
       devShells.${system}.default = pkgs.mkShell {
         name = "python";
 
-        packages = [
+        nativeBuildInputs = [
           (pkgs.python3.withPackages (pypkgs: with pypkgs; [
             jedi-language-server
             pip
           ]))
         ];
 
+        buildInputs = with pkgs; [
+          zlib
+        ];
+
         env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
           pkgs.stdenv.cc.cc.lib
-          pkgs.libz
+          pkgs.zlib
         ];
 
         shellHook = ''

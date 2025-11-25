@@ -1,5 +1,5 @@
 {
-  description = "Flake Template for Development Environments";
+  description = "Flake for Go";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -14,7 +14,10 @@
       devShells.${system}.default = pkgs.mkShell {
         name = "go";
 
-        packages = with pkgs; [ go ];
+        nativeBuildInputs = with pkgs; [
+          go
+          gopls
+        ];
       };
     };
 }
