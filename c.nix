@@ -15,8 +15,8 @@
         name = "c";
 
         nativeBuildInputs = with pkgs;[
-          clang
           clang-tools
+          clang
 
           gnumake
           cmake
