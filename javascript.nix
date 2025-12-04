@@ -1,5 +1,5 @@
 {
-  description = "Flake for Go";
+  description = "Flake Template for Development Environments";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -12,11 +12,10 @@
     in
     {
       devShells.${system}.default = pkgs.mkShell {
-        name = "go";
+        name = "javascript";
 
         nativeBuildInputs = with pkgs; [
-          go
-          gopls
+          nodejs_24
         ];
 
         shellHook = ''

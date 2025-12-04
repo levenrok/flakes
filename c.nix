@@ -34,6 +34,10 @@
           pkgs.stdenv.cc.cc.lib
           pkgs.zlib
         ];
+
+        shellHook = ''
+          echo -e "\033[0;32mDone!\033[0m"
+        '';
       };
     };
 }
