@@ -19,7 +19,6 @@
 
         nativeBuildInputs = [
           (pkgs.python3.withPackages (pypkgs: with pypkgs; [
-            jedi-language-server
             pip
           ]))
         ];

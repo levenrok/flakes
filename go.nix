@@ -16,7 +16,6 @@
 
         nativeBuildInputs = with pkgs; [
           go
-          gopls
         ];
 
         shellHook = ''
