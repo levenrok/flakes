@@ -1,5 +1,5 @@
 {
-  description = "Flake Template for Development Environments";
+  description = "Flake for Web Development with JavaScript";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";

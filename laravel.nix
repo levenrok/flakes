@@ -1,5 +1,5 @@
 {
-  description = "Flake for Laravel";
+  description = "Flake for Web Development with PHP + Laravel";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";

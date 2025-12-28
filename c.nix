@@ -1,5 +1,5 @@
 {
-  description = "Flake for C";
+  description = "Flake for C Development";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -15,6 +15,7 @@
         name = "c";
 
         nativeBuildInputs = with pkgs;[
+          clang-tools
           clang
 
           gnumake

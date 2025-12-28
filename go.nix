@@ -1,5 +1,5 @@
 {
-  description = "Flake for Go";
+  description = "Flake for Go Development";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -16,6 +16,8 @@
 
         nativeBuildInputs = with pkgs; [
           go
+
+          gopls
         ];
 
         shellHook = ''

@@ -1,5 +1,5 @@
 {
-  description = "Flake for Python";
+  description = "Flake for Python Development";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -20,6 +20,8 @@
         nativeBuildInputs = [
           (pkgs.python3.withPackages (pypkgs: with pypkgs; [
             pip
+
+            jedi-language-server
           ]))
         ];
 
