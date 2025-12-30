@@ -16,6 +16,8 @@
 
         nativeBuildInputs = with pkgs; [
           nodejs_24
+
+          typescript-language-server
         ];
 
         shellHook = ''
