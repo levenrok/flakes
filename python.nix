@@ -17,12 +17,11 @@
       devShells.${system}.default = pkgs.mkShell {
         name = "python";
 
-        nativeBuildInputs = [
-          (pkgs.python3.withPackages (pypkgs: with pypkgs; [
+        nativeBuildInputs = with pkgs;[
+          (python3.withPackages (pypkgs: with pypkgs; [
             pip
-
-            jedi-language-server
           ]))
+          basedpyright
         ];
 
         buildInputs = with pkgs; [
@@ -35,12 +34,6 @@
         ];
 
         shellHook = ''
-          if [[ ! -d ${pyenv} ]]; then
-              python3 -m venv ${pyenv}
-          fi
-
-          source ${pyenv_bin}
-
           echo -e "\033[0;32mDone!\033[0m"
         '';
       };

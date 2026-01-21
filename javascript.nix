@@ -18,6 +18,7 @@
           nodejs_24
 
           typescript-language-server
+          tailwindcss-language-server
         ];
 
         shellHook = ''
