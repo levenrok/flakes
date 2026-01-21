@@ -14,7 +14,7 @@
       devShells.${system}.default = pkgs.mkShell {
         name = "rust";
 
-        buildInputs = with pkgs ;[
+        nativeBuildInputs = with pkgs ;[
           cargo
           rustc
 
