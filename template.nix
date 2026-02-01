@@ -3,24 +3,33 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs }:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages."${system}";
-    in
+  outputs =
     {
-      devShells.${system}.default = pkgs.mkShell {
-        name = "";
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          name = "";
 
-        nativeBuildInputs = [ ];
+          nativeBuildInputs = [ ];
 
-        buildInputs = [ ];
+          buildInputs = [ ];
 
-        env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ ];
+          env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ ];
 
-        shellHook = '' '';
-      };
-    };
+          shellHook = '''';
+        };
+      }
+    );
 }

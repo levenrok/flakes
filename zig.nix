@@ -3,29 +3,38 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs }:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages."${system}";
-    in
+  outputs =
     {
-      devShells.${system}.default = pkgs.mkShell {
-        name = "zig";
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          name = "zig";
 
-        nativeBuildInputs = with pkgs;[
-          zig
+          nativeBuildInputs = with pkgs; [
+            zig
 
-          zls
-        ];
+            zls
+          ];
 
-        shellHook = ''
-          export ZIG_GLOBAL_CACHE_DIR="$PWD/.cache/zig";
-          export ZIG_LOCAL_CACHE_DIR="$PWD/.zig-cache";
+          shellHook = ''
+            export ZIG_GLOBAL_CACHE_DIR="$PWD/.cache/zig";
+            export ZIG_LOCAL_CACHE_DIR="$PWD/.zig-cache";
 
-          echo -e "\033[0;32mDone!\033[0m"
-        '';
-      };
-    };
+            echo -e "\033[0;32mDone!\033[0m"
+          '';
+        };
+      }
+    );
 }
