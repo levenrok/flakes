@@ -12,30 +12,32 @@
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , flake-utils
-    , fenix
-    ,
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      fenix,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = import nixpkgs { inherit system; };
-        toolchain = (fenix.packages.${system}.toolchainOf {
-          channel = "nightly";
-          date = "2026-03-21";
-          sha256 = "sha256-rboGKQLH4eDuiY01SINOqmXUFUNr9F4awoFZGzib17o=";
-        }).withComponents [
-          "cargo"
-          "clippy"
-          "rustc"
-          "rustfmt"
-          "rust-analyzer"
-          "rust-src"
-          "llvm-tools-preview"
-          "rustc-codegen-cranelift-preview"
-        ];
+        toolchain =
+          (fenix.packages.${system}.toolchainOf {
+            channel = "nightly";
+            date = "2026-03-21";
+            sha256 = "sha256-rboGKQLH4eDuiY01SINOqmXUFUNr9F4awoFZGzib17o=";
+          }).withComponents
+            [
+              "cargo"
+              "clippy"
+              "rustc"
+              "rustfmt"
+              "rust-analyzer"
+              "rust-src"
+              "llvm-tools-preview"
+              "rustc-codegen-cranelift-preview"
+            ];
       in
       {
         devShells.default = pkgs.mkShell {

@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -24,7 +23,6 @@
 
           nativeBuildInputs = with pkgs; [
             go
-
             gopls
           ];
 
